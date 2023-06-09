@@ -9,16 +9,15 @@
 <body>
 
 
-<form method="POST" action='MealServlet' name="frmAddUser">
+<form method="POST" action='mealServlet' name="addMeal">
 
   Meal ID : <input type="text" readonly="readonly" name="mealId"
                    value="<c:out value="${meal.id}" />" /> <br />
-
   Description : <input
         type="text" name="description"
         value="<c:out value="${meal.description}" />" /> <br />
   DateTime : <input
-        type="datetime-local" name="mealdateTime"
+        type="datetime-local" name="dateTime"
         value="<c: out value="${meal.dateTime}" />" /> <br />
   Calories : <input type="text" name="calories"
                  value="<c:out value="${meal.calories}" />" /> <br /> <input

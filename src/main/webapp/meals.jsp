@@ -17,7 +17,7 @@
             <th>Date</th>
             <th>Description</th>
             <th>Calories</th>
-            <th>Actions</th>
+            <th colspan=2>Action</th>
         </tr>
         <c:forEach var="meal" items="${meals}">
             <c:set var="color" value="${meal.excess ? 'red' : 'green'}" />
@@ -26,10 +26,11 @@
                     <td>${f:formatLocalDateTime(meal.dateTime, 'yyyy-dd-MM HH:mm')}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
-                <td><a href="MealServlet?action=edit&mealId=<c:out value="${meal.id}"/>">Update</a></td>
-                <td><a href="MealServlet?action=delete&mealId=<c:out value="${meal.id}"/>">Delete</a></td>
+                <td><a href="meals?action=edit&mealId=${meal.id}">Update</a></td>
+                <td><a href="meals?action=delete&mealId=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </TABLE>
+<p><a href="mealServlet?action=insert">Add User</a></p>
 </body>
 </html>

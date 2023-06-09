@@ -4,13 +4,13 @@ import java.util.List;
 
 public interface Repository<T> {
 
-    void add(T obj);
+    T add(T obj);
 
-    void addAll(List<T> list);
+    T update(T obj);
 
-    void update(T obj);
+    void delete(int id);
 
-    void delete(Integer id);
+    T get(Integer id);
 
     List<T> getAll();
 }

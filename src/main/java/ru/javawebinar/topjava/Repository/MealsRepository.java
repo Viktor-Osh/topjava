@@ -7,17 +7,12 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MealsRepository implements Repository<Meal> {
     private static final AtomicInteger idCounter = new AtomicInteger(1);
-    public static final int CALORIES_PER_DAY = 2000;
-
-    public ConcurrentHashMap<Integer, Meal> getMealsHashMap() {
-        return mealsHashMap;
-    }
-
     private final ConcurrentHashMap<Integer, Meal> mealsHashMap = new ConcurrentHashMap<>();
 
     public MealsRepository() {
@@ -30,33 +25,32 @@ public class MealsRepository implements Repository<Meal> {
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
                 new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
 
-            addAll(meals);
-    }
-
-    @Override
-    public void addAll(List<Meal> meals) {
         for (Meal meal : meals) {
             add(meal);
         }
     }
 
+
     @Override
-    public void add(Meal meal) {
-        if (meal.getId() == null) {
-            meal.setId(idCounter.getAndIncrement());
-        }
-        mealsHashMap.putIfAbsent(meal.getId(), meal);
-    }
-    
-    @Override
-    public void update(Meal meal) {
-        if (mealsHashMap.containsKey(meal.getId())) {
-            mealsHashMap.put(meal.getId(), meal);
-        }
+    public Meal get(Integer id) {
+        return mealsHashMap.get(id);
     }
 
     @Override
-    public void delete(Integer id) {
+    public Meal add(Meal meal) {
+        if (meal.getId() == null) {
+            meal.setId(idCounter.getAndIncrement());
+        }
+        return mealsHashMap.putIfAbsent(meal.getId(), meal);
+    }
+
+    @Override
+    public Meal update(Meal meal) {
+        return mealsHashMap.computeIfPresent(meal.getId(),(id, value)->  value);
+    }
+
+    @Override
+    public void delete(int id) {
         mealsHashMap.remove(id);
     }
 
