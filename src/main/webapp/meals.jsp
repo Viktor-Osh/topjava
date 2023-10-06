@@ -26,11 +26,11 @@
                     <td>${f:formatLocalDateTime(meal.dateTime, 'yyyy-dd-MM HH:mm')}</td>
                     <td>${meal.description}</td>
                     <td>${meal.calories}</td>
-                <td><a href="meals?action=edit&mealId=${meal.id}">Update</a></td>
+                <td><a href="meals?action=edit&mealId=${meal.id}">Edit</a></td>
                 <td><a href="meals?action=delete&mealId=${meal.id}">Delete</a></td>
             </tr>
         </c:forEach>
     </TABLE>
-<p><a href="mealServlet?action=insert">Add User</a></p>
+<p><a href="meals?action=add&mealId=">Add User</a></p>
 </body>
 </html>

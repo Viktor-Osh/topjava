@@ -7,7 +7,6 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -30,7 +29,6 @@ public class MealsRepository implements Repository<Meal> {
         }
     }
 
-
     @Override
     public Meal get(Integer id) {
         return mealsHashMap.get(id);
@@ -46,7 +44,7 @@ public class MealsRepository implements Repository<Meal> {
 
     @Override
     public Meal update(Meal meal) {
-        return mealsHashMap.computeIfPresent(meal.getId(),(id, value)->  value);
+        return mealsHashMap.computeIfPresent(meal.getId(),(o, n)->  meal);
     }
 
     @Override
