@@ -34,12 +34,14 @@ public class MealServlet extends HttpServlet {
         String action = req.getParameter("action");
         switch (action == null ? "default" : action.toLowerCase()) {
             case "delete": {
+                log.debug("delete meal");
                 int mealId = Integer.parseInt(req.getParameter("mealId"));
                 mealsRepository.delete(mealId);
                 resp.sendRedirect(MEALS);
                 break;
             }
             case "edit": {
+                log.debug("edit meal");
                 forward = "/mealEdit.jsp";
                 int mealId = Integer.parseInt(req.getParameter("mealId"));
                 Meal meal = mealsRepository.get(mealId);
@@ -48,18 +50,20 @@ public class MealServlet extends HttpServlet {
                 break;
             }
             case "add": {
+                log.debug("add meal");
                 forward = "/mealEdit.jsp";
                 req.getRequestDispatcher(forward).forward(req, resp);
                 break;
             }
             case "meals": {
-                log.debug("get meals table");
+                log.debug("get meals list");
                 forward = MEALS_LIST;
                 req.setAttribute(MEALS, MealsUtil.filteredByStreams(mealsRepository.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
                 req.getRequestDispatcher(forward).forward(req, resp);
                 break;
             }
             default: {
+                log.debug("get meals list");
                 forward = MEALS_LIST;
                 req.setAttribute(MEALS, MealsUtil.filteredByStreams(mealsRepository.getAll(), LocalTime.MIN, LocalTime.MAX, CALORIES_PER_DAY));
                 req.getRequestDispatcher(forward).forward(req, resp);
@@ -76,8 +80,10 @@ public class MealServlet extends HttpServlet {
         int calories = Integer.parseInt(req.getParameter("calories"));
         Meal meal = new Meal(mealDateTime, description, calories);
         if (id == null || id.isEmpty()) {
+            log.debug("added meal = {}", meal);
             mealsRepository.add(meal);
         } else {
+            log.debug("edited meal = {}", meal);
             Integer mealId = Integer.parseInt(id);
             meal.setId(mealId);
             meal.setCalories(calories);
