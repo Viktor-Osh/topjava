@@ -23,6 +23,4 @@ public class SpringMain {
             mealRestController.getAll().forEach(System.out::println);
         }
     }
-
-
 }
