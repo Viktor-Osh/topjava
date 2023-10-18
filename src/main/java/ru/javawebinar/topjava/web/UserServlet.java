@@ -23,6 +23,6 @@ public class UserServlet extends HttpServlet {
         if (!userId.isEmpty()) {
             SecurityUtil.setAuthUserId(Integer.parseInt(userId));
         }
-        response.sendRedirect("index.html");
+        response.sendRedirect("meals");
     }
 }

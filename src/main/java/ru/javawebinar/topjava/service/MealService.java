@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import static ru.javawebinar.topjava.util.ValidationUtil.checkNotFoundWithId;
 
-@Service("mealService")
+@Service()
 public class MealService {
 
     private final MealRepository repository;
