@@ -30,15 +30,15 @@
         <input type="hidden" name="action" value="filter">
         <div class="form-row">
             <label for="startDate">От даты (включительно):</label>
-            <input type="date" name="startDate" id="startDate" value="<%= request.getParameter("startDate")%>">
+            <input type="date" name="startDate" id="startDate" value="${param.startDate}">
             <label for="startTime">От времени (включительно):</label>
-            <input type="time" name="startTime" id="startTime" value="<%= request.getParameter("startTime")%>">
+            <input type="time" name="startTime" id="startTime" value="${param.startTime}">
         </div>
         <div class="form-row">
             <label for="endDate">До даты (включительно):</label>
-            <input type="date" name="endDate" id="endDate" value="<%= request.getParameter("endDate")%>">
+            <input type="date" name="endDate" id="endDate" value="${param.endDate}">
             <label for="endTime">До времени (не включительно):</label>
-            <input type="time" name="endTime" id="endTime" value="<%= request.getParameter("endTime")%>">
+            <input type="time" name="endTime" id="endTime" value="${param.endTime}">
         </div>
         <button type="submit">Фильтровать</button>
     </form>

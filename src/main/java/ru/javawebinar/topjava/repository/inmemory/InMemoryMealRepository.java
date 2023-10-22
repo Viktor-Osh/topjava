@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-@Repository()
+@Repository
 public class InMemoryMealRepository implements MealRepository {
     private final Map<Integer, Map<Integer, Meal>> repository = new ConcurrentHashMap<>();
     private final AtomicInteger counter = new AtomicInteger(0);
@@ -33,18 +33,14 @@ public class InMemoryMealRepository implements MealRepository {
 
     @Override
     public Meal save(int userId, Meal meal) {
-        Map<Integer, Meal> userMap = repository.compute(userId, (key, existingUserMap) -> {
-            if (existingUserMap == null) {
-                existingUserMap = new ConcurrentHashMap<>();
-            }
-            if (!meal.isNew()) {
-                existingUserMap.computeIfPresent(meal.getId(), (k, v) -> meal);
-            } else {
-                meal.setId(counter.incrementAndGet());
-                existingUserMap.put(meal.getId(), meal);
-            }
-            return existingUserMap;
-        });
+        Map<Integer, Meal> userMap = repository.getOrDefault(userId, new ConcurrentHashMap<>());
+        if (!meal.isNew()) {
+            userMap.computeIfPresent(meal.getId(), (k, v) -> meal);
+        } else {
+            meal.setId(counter.incrementAndGet());
+            userMap.put(meal.getId(), meal);
+        }
+        repository.put(userId, userMap);
         return userMap.get(meal.getId());
     }
 
