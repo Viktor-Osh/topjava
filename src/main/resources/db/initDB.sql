@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS user_role;
+DROP TABLE IF EXISTS meals;
 DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS global_seq;
 
@@ -23,3 +24,32 @@ CREATE TABLE user_role
     CONSTRAINT user_roles_idx UNIQUE (user_id, role),
     FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
+
+-- Table: public.meals
+
+
+CREATE TABLE IF NOT EXISTS meals
+(
+    id integer PRIMARY KEY DEFAULT nextval('global_seq'),
+    datetime timestamp without time zone NOT NULL,
+    description text COLLATE pg_catalog."default",
+    calories integer NOT NULL,
+    user_id integer,
+    CONSTRAINT "meal_datetime_per_userId" UNIQUE (datetime, user_id),
+    CONSTRAINT user_id_meal_fkey FOREIGN KEY (user_id)
+        REFERENCES public.users (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+    TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS meals
+    OWNER to "user";
+-- Index: id_and_datetime_index
+
+
+DROP INDEX IF EXISTS id_and_datetime_index;
+
+CREATE UNIQUE INDEX IF NOT EXISTS id_and_datetime_index
+    ON meals (id ASC NULLS LAST, datetime ASC NULLS LAST);
