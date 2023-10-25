@@ -16,15 +16,15 @@ VALUES ('USER', 100000),
        ('ADMIN', 100001);
 
 INSERT INTO meals (datetime, description, calories, user_id)
-VALUES ('2023-10-22 10:00:00'::timestamp without time zone, 'завтрак usera'::text, '300'::integer, '100000'::integer),
-       ('2023-10-22 13:00:00'::timestamp without time zone, 'обед usera '::text, '1000'::integer, '100000'::integer),
-       ('2023-10-22 19:00:00'::timestamp without time zone, 'ужин usera '::text, '700'::integer, '100000'::integer),
-       ('2023-10-23 11:00:00'::timestamp without time zone, 'завтрак usera '::text, '400'::integer, '100000'::integer),
-       ('2023-10-23 14:00:00'::timestamp without time zone, 'обед usera '::text, '1000'::integer, '100000'::integer),
-       ('2023-10-23 20:00:00'::timestamp without time zone, 'ужин usera '::text, '500'::integer, '100000'::integer),
-       ('2023-10-22 10:00:00'::timestamp without time zone, 'завтрак admina'::text, '301'::integer, '100001'::integer),
-       ('2023-10-22 13:00:00'::timestamp without time zone, 'обед admina '::text, '1001'::integer, '100001'::integer),
-       ('2023-10-22 19:00:00'::timestamp without time zone, 'ужин admina '::text, '701'::integer, '100001'::integer),
-       ('2023-10-23 11:00:00'::timestamp without time zone, 'завтрак admina '::text, '401'::integer, '100001'::integer),
-       ('2023-10-23 14:00:00'::timestamp without time zone, 'обед admina '::text, '1000'::integer, '100001'::integer),
-       ('2023-10-23 20:00:00'::timestamp without time zone, 'ужин admina '::text, '500'::integer, '100001'::integer);
+VALUES ('2023-10-22 10:00:00', 'завтрак usera', '300', '100000'),
+       ('2023-10-22 13:00:00', 'обед usera ', '1000', '100000'),
+       ('2023-10-22 19:00:00', 'ужин usera ', '700', '100000'),
+       ('2023-10-23 11:00:00', 'завтрак usera ', '400', '100000'),
+       ('2023-10-23 14:00:00', 'обед usera ', '1000', '100000'),
+       ('2023-10-23 20:00:00', 'ужин usera ', '500', '100000'),
+       ('2023-10-22 10:00:00', 'завтрак admina', '301', '100001'),
+       ('2023-10-22 13:00:00', 'обед admina ', '1001', '100001'),
+       ('2023-10-22 19:00:00', 'ужин admina ', '701', '100001'),
+       ('2023-10-23 11:00:00', 'завтрак admina ', '401', '100001'),
+       ('2023-10-23 14:00:00', 'обед admina ', '1000', '100001'),
+       ('2023-10-23 20:00:00', 'ужин admina ', '500', '100001');

@@ -27,29 +27,20 @@ CREATE TABLE user_role
 
 -- Table: public.meals
 
-
 CREATE TABLE IF NOT EXISTS meals
 (
-    id integer PRIMARY KEY DEFAULT nextval('global_seq'),
-    datetime timestamp without time zone NOT NULL,
-    description text COLLATE pg_catalog."default",
-    calories integer NOT NULL,
-    user_id integer,
-    CONSTRAINT "meal_datetime_per_userId" UNIQUE (datetime, user_id),
+    id INTEGER PRIMARY KEY DEFAULT nextval('global_seq'),
+    datetime TIMESTAMP NOT NULL,
+    description TEXT NOT NULL ,
+    calories INTEGER NOT NULL,
+    user_id INTEGER,
+    CONSTRAINT meal_datetime_per_user_id UNIQUE (datetime, user_id),
     CONSTRAINT user_id_meal_fkey FOREIGN KEY (user_id)
-        REFERENCES public.users (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-)
+        REFERENCES public.users (id) MATCH SIMPLE ON DELETE CASCADE
+);
+-- Index: user_id_and_datetime_index
 
-    TABLESPACE pg_default;
+DROP INDEX IF EXISTS user_id_and_datetime_index;
 
-ALTER TABLE IF EXISTS meals
-    OWNER to "user";
--- Index: id_and_datetime_index
-
-
-DROP INDEX IF EXISTS id_and_datetime_index;
-
-CREATE UNIQUE INDEX IF NOT EXISTS id_and_datetime_index
-    ON meals (id ASC NULLS LAST, datetime ASC NULLS LAST);
+CREATE UNIQUE INDEX IF NOT EXISTS user_id_and_datetime_index
+    ON meals (user_id ASC NULLS LAST, datetime ASC NULLS LAST);
