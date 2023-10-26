@@ -34,9 +34,8 @@ CREATE TABLE IF NOT EXISTS meals
     description TEXT NOT NULL ,
     calories INTEGER NOT NULL,
     user_id INTEGER,
-    CONSTRAINT meal_datetime_per_user_id UNIQUE (datetime, user_id),
     CONSTRAINT user_id_meal_fkey FOREIGN KEY (user_id)
-        REFERENCES public.users (id) MATCH SIMPLE ON DELETE CASCADE
+        REFERENCES public.users (id) MATCH FULL ON DELETE CASCADE
 );
 -- Index: user_id_and_datetime_index
 
