@@ -1,9 +1,10 @@
 package ru.javawebinar.topjava.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -15,7 +16,6 @@ import java.time.LocalTime;
         @NamedQuery(name = Meal.GET_BETWEEN_HALF_OPEN, query = "SELECT m FROM Meal m where m.user.id =:user_id " +
                 "AND m.dateTime >=:startDateTime AND m.dateTime <:endDateTime ORDER BY m.dateTime DESC ")
 })
-
 @Entity
 @Table(name = "meal", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "date_time"}))
 public class Meal extends AbstractBaseEntity {
@@ -30,15 +30,17 @@ public class Meal extends AbstractBaseEntity {
     private LocalDateTime dateTime;
 
     @Column(name = "description", nullable = false)
-    @NotBlank
+    @Size(min = 2, max = 120)
     private String description;
 
     @Column(name = "calories", nullable = false)
-    @Min(value = 1)
+    @Min(value = 10)
+    @Max(value = 5000)
     private int calories;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @NotNull
     private User user;
 
     public Meal() {
