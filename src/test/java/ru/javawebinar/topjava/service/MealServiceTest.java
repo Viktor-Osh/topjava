@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.service;
 import org.junit.AfterClass;
 import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestWatcher;
+import org.junit.rules.Stopwatch;
 import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -31,7 +31,6 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 })
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-
 public class MealServiceTest {
 
     private static final Logger log = LoggerFactory.getLogger(MealServiceTest.class);
@@ -42,22 +41,19 @@ public class MealServiceTest {
     private MealService service;
 
     @Rule
-    public TestWatcher watcher = new TestWatcher() {
-        private long startTimeMls;
-
+    public Stopwatch stopwatch = new Stopwatch() {
         @Override
-        protected void starting(Description description) {
-            startTimeMls = System.currentTimeMillis();
-        }
-
-        @Override
-        protected void finished(Description description) {
-            long executeTimeMls = System.currentTimeMillis() - startTimeMls;
-            String msg = String.format("%nTest: %s completed in - %d ms", description.getMethodName(), executeTimeMls);
-            completeTimeAllTests.append(String.format("%n%-30s * %-3d ms", description.getMethodName(), executeTimeMls));
+        protected void finished(long nanos, Description description) {
+            String msg = String.format("%nTest: %s completed in - %d ms", description.getMethodName(), nanos / 1000000);
+            completeTimeAllTests.append(String.format("%n%-30s * %-3d ms", description.getMethodName(), nanos / 1000000));
             log.info(msg);
         }
     };
+
+    @AfterClass
+    public static void printAllCompleteTime() {
+        log.info(completeTimeAllTests.toString());
+    }
 
     @Test
     public void delete() {
@@ -136,10 +132,5 @@ public class MealServiceTest {
     @Test
     public void getBetweenWithNullDates() {
         MEAL_MATCHER.assertMatch(service.getBetweenInclusive(null, null, USER_ID), meals);
-    }
-
-    @AfterClass
-    public static void printAllCompleteTime() {
-        log.info(completeTimeAllTests.toString());
     }
 }
