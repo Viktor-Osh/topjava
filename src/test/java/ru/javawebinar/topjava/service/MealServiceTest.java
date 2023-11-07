@@ -6,12 +6,14 @@ import org.junit.runner.Description;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.ActiveDbProfileResolver;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
@@ -33,7 +35,6 @@ import static ru.javawebinar.topjava.UserTestData.USER_ID;
 @RunWith(SpringRunner.class)
 @Sql(scripts = "classpath:db/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
 @ActiveProfiles(resolver = ActiveDbProfileResolver.class)
-@Ignore
 public class MealServiceTest {
     private static final Logger log = getLogger("result");
 
@@ -52,6 +53,14 @@ public class MealServiceTest {
 
     @Autowired
     private MealService service;
+
+//    @Autowired
+//    private CacheManager cacheManager;
+//
+//    @Before
+//    public void setup() {
+//        cacheManager.getCache("meals").clear();
+//    }
 
     @AfterClass
     public static void printResult() {
@@ -95,6 +104,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void get() {
         Meal actual = service.get(ADMIN_MEAL_ID, ADMIN_ID);
         MEAL_MATCHER.assertMatch(actual, adminMeal1);
@@ -111,6 +121,7 @@ public class MealServiceTest {
     }
 
     @Test
+    @Transactional
     public void update() {
         Meal updated = getUpdated();
         service.update(updated, USER_ID);
