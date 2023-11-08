@@ -25,6 +25,9 @@ public class User extends AbstractNamedEntity {
     public static final String BY_EMAIL = "User.getByEmail";
     public static final String ALL_SORTED = "User.getAllSorted";
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<Meal> mealList;
+
     @Column(name = "email", nullable = false, unique = true)
     @Email
     @NotBlank
@@ -123,6 +126,12 @@ public class User extends AbstractNamedEntity {
         return password;
     }
 
+    public List<Meal> getMealList() {
+        if (mealList == null) {
+            mealList = new ArrayList<>();
+        }
+        return mealList;
+    }
     @Override
     public String toString() {
         return "User{" +
