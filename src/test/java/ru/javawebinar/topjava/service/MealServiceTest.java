@@ -20,14 +20,6 @@ public abstract class MealServiceTest extends AbstractServiceTest {
     @Autowired
     private MealService service;
 
-//    @Autowired
-//    private CacheManager cacheManager;
-
-//    @Before
-//    public void setup() {
-//        cacheManager.getCache("meals").clear();
-//    }
-
     @Test
     public void delete() {
         service.delete(MEAL1_ID, USER_ID);

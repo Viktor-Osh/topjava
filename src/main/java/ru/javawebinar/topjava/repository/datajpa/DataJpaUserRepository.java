@@ -6,6 +6,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Repository
@@ -43,9 +44,7 @@ public class DataJpaUserRepository implements UserRepository {
         return crudRepository.findAll(SORT_NAME_EMAIL);
     }
 
-    public List<Meal> getUserWithMealList(int id) {
-        return crudRepository.getUserWithMealList(id).getMealList()
-                .stream().sorted((meal, t1) -> t1.getDateTime().compareTo(meal.getDateTime())).toList();
+    public User getUserWithMealList(int id) {
+        return crudRepository.getUserWithMealList(id);
     }
-
 }

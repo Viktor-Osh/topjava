@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.repository.datajpa;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,8 @@ public interface CrudUserRepository extends JpaRepository<User, Integer> {
 
     User getByEmail(String email);
 
-    @Transactional
-    @Query("SELECT u FROM User u LEFT JOIN u.mealList WHERE u.id=:id")
+    @Transactional(readOnly = true)
+    @EntityGraph(attributePaths = {"mealList", "roles"})
+    @Query("SELECT u FROM User u WHERE u.id=:id")
     User getUserWithMealList(@Param("id") int id);
 }
