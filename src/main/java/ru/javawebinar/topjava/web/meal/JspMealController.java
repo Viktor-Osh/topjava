@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import ru.javawebinar.topjava.model.Meal;
 
@@ -20,18 +21,17 @@ import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
 
 @Controller
+@RequestMapping("/meals")
 public class JspMealController {
     private static final Logger log = LoggerFactory.getLogger(JspMealController.class);
 
     @Autowired
     private MealRestController controller;
 
-    @GetMapping("/meals")
+    @GetMapping
     public String getAll(Model model) {
         log.info("meals");
-        if (model.getAttribute("meals") == null) {
-            model.addAttribute("meals", controller.getAll());
-        }
+        model.addAttribute("meals", controller.getAll());
         return "meals";
     }
 
@@ -43,23 +43,25 @@ public class JspMealController {
         return "redirect:meals";
     }
 
-    @GetMapping({"/create", "/update"})
-    public ModelAndView createOrUpdate(HttpServletRequest request) {
+    @GetMapping("/create")
+    public ModelAndView create(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("mealForm");
-        if ((request.getParameter("id")) != null) {
-            int mealId = Integer.parseInt(request.getParameter("id"));
-            log.info("update meal {}", mealId);
-            modelAndView.addObject("meal", controller.get(mealId));
-        } else {
             log.info("create meal");
             final Meal meal = new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000);
             modelAndView.addObject("meal", meal);
-        }
+        return modelAndView;
+    }
+  @GetMapping( "/update")
+    public ModelAndView update(HttpServletRequest request) {
+        ModelAndView modelAndView = new ModelAndView("mealForm");
+            int mealId = Integer.parseInt(request.getParameter("id"));
+            log.info("update meal {}", mealId);
+            modelAndView.addObject("meal", controller.get(mealId));
         return modelAndView;
     }
 
-    @PostMapping("/meals")
-    public String addNewOrUpdate(HttpServletRequest request) {
+    @PostMapping
+    public String save(HttpServletRequest request) {
         Meal meal = new Meal(LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));

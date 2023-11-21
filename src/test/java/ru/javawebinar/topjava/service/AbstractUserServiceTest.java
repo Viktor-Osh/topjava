@@ -35,7 +35,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     Environment environment;
 
-    @Before
+    @Before 
     public void setup() {
         cacheManager.getCache("users").clear();
         if (jpaUtil != null) {
