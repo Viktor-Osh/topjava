@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
-import org.springframework.core.env.Environment;
 import org.springframework.dao.DataAccessException;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
@@ -107,5 +106,22 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 9, true, new Date(), Set.of())));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "password", 10001, true, new Date(), Set.of())));
+    }
+
+    @Test
+    public void addUserRole() {
+        Assume.assumeTrue(matchesProfiles("jdbc"));
+        User user1 = service.get(ADMIN_ID);
+        service.saveUserRole(user1, List.of(Role.ADMIN, Role.USER));
+        User actual = service.get(ADMIN_ID);
+        actual.setRoles(service.getUserRoles(actual));
+        USER_MATCHER.assertMatch(actual, admin);
+    }
+
+    @Test
+    public void deleteUserRole() {
+        Assume.assumeTrue(matchesProfiles("jdbc"));
+        service.deleteUserRole(service.get(USER_ID), Role.USER);
+        USER_MATCHER.assertMatch(service.get((USER_ID)), userWithoutRole);
     }
 }

@@ -1,7 +1,9 @@
 package ru.javawebinar.topjava.repository;
 
+import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface UserRepository {
@@ -21,5 +23,16 @@ public interface UserRepository {
 
     default User getWithMeals(int id) {
         throw new UnsupportedOperationException();
+    }
+
+    default List<Role> getUserRoles(int userId) {
+        return new ArrayList<>();
+    }
+
+    default void saveUserRoles(int userId, List<Role> roles) {
+    }
+
+    default boolean deleteUserRole(int userId, Role role) {
+        return false;
     }
 }
