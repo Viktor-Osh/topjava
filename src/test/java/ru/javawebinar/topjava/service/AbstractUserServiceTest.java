@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.dao.DataAccessException;
+import ru.javawebinar.topjava.Profiles;
 import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
@@ -100,7 +101,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void createWithException() throws Exception {
-        Assume.assumeTrue(matchesProfiles("datajpa", "jpa"));
+        Assume.assumeTrue(matchesProfiles(Profiles.DATAJPA, Profiles.JPA));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "  ", "password", Role.USER)));
         validateRootCause(ConstraintViolationException.class, () -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)));
@@ -110,7 +111,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void addUserRole() {
-        Assume.assumeTrue(matchesProfiles("jdbc"));
+        Assume.assumeTrue(matchesProfiles(Profiles.JDBC));
         User user1 = service.get(ADMIN_ID);
         service.saveUserRole(user1, List.of(Role.ADMIN, Role.USER));
         User actual = service.get(ADMIN_ID);
@@ -120,7 +121,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Test
     public void deleteUserRole() {
-        Assume.assumeTrue(matchesProfiles("jdbc"));
+        Assume.assumeTrue(matchesProfiles(Profiles.JDBC));
         service.deleteUserRole(service.get(USER_ID), Role.USER);
         USER_MATCHER.assertMatch(service.get((USER_ID)), userWithoutRole);
     }

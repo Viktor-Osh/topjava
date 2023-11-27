@@ -4,12 +4,19 @@
 
 <html>
     <jsp:include page="fragments/headTag.jsp"/>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
+
 <body>
 <jsp:include page="fragments/bodyHeader.jsp"/>
 <section>
     <hr>
-    <h2><spring:message code="meal.${param.action == 'create' ? 'add' : 'editFull'}"/></h2>
+    <c:choose>
+        <c:when test="${empty param.id}">
+            <h2><spring:message code="meal.add"/></h2>
+        </c:when>
+        <c:otherwise>
+            <h2><spring:message code="meal.editFull"/></h2>
+        </c:otherwise>
+    </c:choose>
     <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
     <form method="post" action="${pageContext.request.contextPath}/meals">
         <input type="hidden" name="id" value="${meal.id}">

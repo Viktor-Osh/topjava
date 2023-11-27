@@ -13,6 +13,7 @@ import ru.javawebinar.topjava.model.Role;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -50,7 +51,7 @@ public class JdbcUserRepository implements UserRepository {
                 """, parameterSource) == 0) {
             return null;
         }
-        saveUserRoles(user.id(), user.getRoles().stream().toList());
+        saveUserRoles(user.id(), new ArrayList<>(user.getRoles()));
         return user;
     }
 
@@ -74,7 +75,9 @@ public class JdbcUserRepository implements UserRepository {
     public User getByEmail(String email) {
         List<User> users = jdbcTemplate.query("SELECT * FROM users WHERE email=?", ROW_MAPPER, email);
         User user = DataAccessUtils.singleResult(users);
-        user.setRoles(getUserRoles(user.id()));
+        if (user != null) {
+            user.setRoles(getUserRoles(user.id()));
+        }
         return user;
     }
 
@@ -91,7 +94,6 @@ public class JdbcUserRepository implements UserRepository {
     @Override
     @Transactional
     public void saveUserRoles(int userId, List<Role> roles) {
-        jdbcTemplate.update("DELETE FROM user_role WHERE user_id=?", userId);
         List<Object[]> batchArgs = List.of(roles.stream()
                 .map(role -> new Object[]{userId, role.toString()})
                 .toArray(Object[][]::new));
