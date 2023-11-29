@@ -42,7 +42,6 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .content(JsonUtil.writeValue(updated)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-
         USER_MATCHER.assertMatch(userService.get(USER_ID), updated);
     }
 }

@@ -27,6 +27,11 @@ public abstract class AbstractUserController {
         return service.get(id);
     }
 
+    public User getWithMeal(int id) {
+        log.info("get user {} with meals", id);
+        return service.getWithMeals(id);
+    }
+
     public User create(User user) {
         log.info("create {}", user);
         checkNew(user);
