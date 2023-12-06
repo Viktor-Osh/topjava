@@ -80,7 +80,7 @@
                     <span class="fa fa-close"></span>
                     <spring:message code="common.cancel"/>
                 </button>
-                <button type="button" class="btn btn-primary" onclick="save()">
+                <button type="button" class="btn btn-primary" onclick="save(userCtx)">
                     <span class="fa fa-check"></span>
                     <spring:message code="common.save"/>
                 </button>
