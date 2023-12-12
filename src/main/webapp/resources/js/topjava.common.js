@@ -13,14 +13,14 @@ function makeEditable(datatableApi) {
 }
 
 function add() {
-    $("#modalTitle").html(i18n["addTitle"]);
+    $("#modalTitle").html(i18n['addTitle']);
     form.find(":input").val("");
     $("#editRow").modal();
 }
 
 function updateRow(id) {
     form.find(":input").val("");
-    $("#modalTitle").html(i18n["editTitle"]);
+    $("#modalTitle").html(i18n['editTitle']);
     $.get(ctx.ajaxUrl + id, function (data) {
         $.each(data, function (key, value) {
             form.find("input[name='" + key + "']").val(value);

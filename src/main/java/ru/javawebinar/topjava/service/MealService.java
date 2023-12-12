@@ -2,9 +2,12 @@ package ru.javawebinar.topjava.service;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
+import ru.javawebinar.topjava.to.MealTo;
+import ru.javawebinar.topjava.util.MealsUtil;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,6 +46,13 @@ public class MealService {
         checkNotFoundWithId(repository.save(meal, userId), meal.id());
     }
 
+    @Transactional
+    public void update(MealTo mealTo, int userId) {
+        Meal meal = get(mealTo.id(), userId);
+        Meal updatedMeal = MealsUtil.updateFromTo(meal, mealTo);
+        repository.save(updatedMeal, userId);
+    }
+
     public Meal create(Meal meal, int userId) {
         Assert.notNull(meal, "meal must not be null");
         return repository.save(meal, userId);
@@ -51,4 +61,5 @@ public class MealService {
     public Meal getWithUser(int id, int userId) {
         return checkNotFoundWithId(repository.getWithUser(id, userId), id);
     }
+
 }
