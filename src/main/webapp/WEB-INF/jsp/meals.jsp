@@ -20,19 +20,19 @@
                     <div class="row">
                         <div class="col-3">
                             <label for="startDate"><spring:message code="meal.startDate"/></label>
-                            <input class="form-control" type="date" name="startDate" id="startDate">
+                            <input class="form-control" type="text" name="startDate" id="startDate">
                         </div>
                         <div class="col-3">
                             <label for="endDate"><spring:message code="meal.endDate"/></label>
-                            <input class="form-control" type="date" name="endDate" id="endDate">
+                            <input class="form-control" type="text" name="endDate" id="endDate">
                         </div>
                         <div class="offset-2 col-2">
                             <label for="startTime"><spring:message code="meal.startTime"/></label>
-                            <input class="form-control" type="time" name="startTime" id="startTime">
+                            <input class="form-control" type="text" name="startTime" id="startTime">
                         </div>
                         <div class="col-2">
                             <label for="endTime"><spring:message code="meal.endTime"/></label>
-                            <input class="form-control" type="time" name="endTime" id="endTime">
+                            <input class="form-control" type="text" name="endTime" id="endTime">
                         </div>
                     </div>
                 </form>
@@ -79,7 +79,7 @@
                     <input type="hidden" id="id" name="id">
                     <div class="form-group">
                         <label for="dateTime" class="col-form-label"><spring:message code="meal.dateTime"/></label>
-                        <input type="datetime-local" class="form-control" id="dateTime" name="dateTime"
+                        <input type="text" class="form-control" id="dateTime" name="dateTime"
                                placeholder="<spring:message code="meal.dateTime"/>">
                     </div>
 
@@ -111,8 +111,34 @@
 </div>
 <jsp:include page="fragments/footer.jsp"/>
 </body>
+<script src="webjars/datetimepicker/2.5.20-1/jquery.js" ></script>
+<script src="webjars/datetimepicker/2.5.20-1/build/jquery.datetimepicker.full.min.js"></script>
+<link rel="stylesheet" type="text/css" href="webjars/datetimepicker/2.5.20-1/jquery.datetimepicker.css" />
 <script type="text/javascript">
     i18n["addTitle"] = '<spring:message code="meal.add"/>';
     i18n["editTitle"] = '<spring:message code="meal.edit"/>';
+</script>
+<script>
+    function formatDate(date) {
+        return date.toISOString().slice(0, 16) + ':00';
+    }
+    $.datetimepicker.setLocale('ru');
+    $('#startDate, #endDate').datetimepicker(
+        {
+            timepicker: false,
+            format: 'Y-m-d'
+        });
+    $('#startTime, #endTime').datetimepicker(
+        {
+            datepicker: false,
+            format: 'H:i'
+        });
+    $('#dateTime').datetimepicker(
+        {
+            dateFormat: 'Y-m-d H:i',
+            onChangeDateTime: function(dp, $input) {
+                $input.val(formatDate(dp));
+            }
+        });
 </script>
 </html>

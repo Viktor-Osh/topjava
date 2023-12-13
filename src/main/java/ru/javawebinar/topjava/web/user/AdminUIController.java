@@ -7,11 +7,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
-import ru.javawebinar.topjava.util.ValidationUtil;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.util.ValidationUtil.getErrorFieldsMsg;
 
