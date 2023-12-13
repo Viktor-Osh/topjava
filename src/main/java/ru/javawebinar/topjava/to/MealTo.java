@@ -6,32 +6,26 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.beans.ConstructorProperties;
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class MealTo extends BaseTo implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class MealTo extends BaseTo {
 
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dateTime;
 
     @NotNull
-    @Size(min = 2, max = 120, message = "length must be between 2 and 120 characters")
+    @Size(min = 2, max = 120)
     private String description;
 
-    @NotNull()
-    @Range(min = 10, max = 5000, message = "length must be between 10 and 5000 characters")
-    private Integer calories;
+    @NotNull
+    @Range(min = 10, max = 5000)
+    private int calories;
 
     private boolean excess;
 
     public MealTo() {
-        this.excess = false;
     }
 
     @ConstructorProperties({"id", "dateTime", "description", "calories", "excess"})
@@ -51,7 +45,7 @@ public class MealTo extends BaseTo implements Serializable {
         return description;
     }
 
-    public Integer getCalories() {
+    public int getCalories() {
         return calories;
     }
 
@@ -67,7 +61,7 @@ public class MealTo extends BaseTo implements Serializable {
         this.description = description;
     }
 
-    public void setCalories(Integer calories) {
+    public void setCalories(int calories) {
         this.calories = calories;
     }
 
