@@ -123,22 +123,42 @@
         return date.toISOString().slice(0, 16) + ':00';
     }
     $.datetimepicker.setLocale('ru');
-    $('#startDate, #endDate').datetimepicker(
-        {
-            timepicker: false,
-            format: 'Y-m-d'
-        });
-    $('#startTime, #endTime').datetimepicker(
-        {
-            datepicker: false,
-            format: 'H:i'
-        });
-    $('#dateTime').datetimepicker(
-        {
-            dateFormat: 'Y-m-d H:i',
-            onChangeDateTime: function(dp, $input) {
-                $input.val(formatDate(dp));
-            }
-        });
+    var endDatePicker = $('#endDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d',
+    });
+
+    var endTimePicker = $('#endTime').datetimepicker({
+        datepicker: false,
+        format: 'H:i',
+    });
+
+    var startDatePicker = $('#startDate').datetimepicker({
+        timepicker: false,
+        format: 'Y-m-d',
+    });
+
+    var startTimePicker =  $('#startTime').datetimepicker({
+        datepicker: false,
+        format: 'H:i',
+    });
+
+    startDatePicker.on('change', function (e) {
+        var selectedDate = e.target.value;
+        endDatePicker.datetimepicker('setOptions', { minDate: selectedDate });
+    });
+//set the minimal endDate and endTime based on startDate and startTime
+    startTimePicker.on('change', function (e) {
+        var selectedTime = e.target.value;
+        endTimePicker.datetimepicker('setOptions', {minTime: selectedTime});
+    });
+
+        $('#dateTime').datetimepicker(
+            {
+                dateFormat: 'Y-m-d H:i',
+                onChangeDateTime: function (dp, $input) {
+                    $input.val(formatDate(dp));
+                }
+            });
 </script>
 </html>
