@@ -32,7 +32,7 @@ public class ExceptionInfoHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(NotFoundException.class)
     public ErrorInfo notFoundError(HttpServletRequest req, NotFoundException e) {
-        return logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND);
+        return logAndGetErrorInfo(req, e, false, DATA_NOT_FOUND, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.CONFLICT)  // 409
@@ -40,41 +40,34 @@ public class ExceptionInfoHandler {
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         String rootMsg = e.getMessage();
         if (rootMsg!=null && rootMsg.toLowerCase().contains("meal_unique_user_datetime_idx")) {
-            return logAndGetErrorInfo(req, e, true, DUPLICATE_DATE_TIME);
+            return logAndGetErrorInfo(req, e, true, DUPLICATE_DATE_TIME, "User with this date/time already exists");
         }
         if (rootMsg!=null && rootMsg.toLowerCase().contains("users_unique_email_idx")) {
-            return logAndGetErrorInfo(req, e, true, DUPLICATE_EMAIL_ERROR);
+            return logAndGetErrorInfo(req, e, true, DUPLICATE_EMAIL_ERROR, "User with this email already exists");
         } else
-            return logAndGetErrorInfo(req, e, true, DATA_ERROR);
+            return logAndGetErrorInfo(req, e, true, DATA_ERROR, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)  // 422
     @ExceptionHandler({IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
     public ErrorInfo validationError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
+        return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ErrorInfo internalError(HttpServletRequest req, Exception e) {
-        return logAndGetErrorInfo(req, e, true, APP_ERROR);
+        return logAndGetErrorInfo(req, e, true, APP_ERROR, e.getMessage());
     }
 
     //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String message) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (logException) {
             log.error(errorType + " at request " + req.getRequestURL(), rootCause);
         } else {
             log.warn("{} at request  {}: {}", errorType, req.getRequestURL(), rootCause.toString());
         }
-        String detail = rootCause.getMessage();
-        if (errorType == DUPLICATE_EMAIL_ERROR) {
-            detail = "User with this email already exists";
-        }
-        if (errorType == DUPLICATE_DATE_TIME) {
-            detail = "Meal with this date and time already exist";
-        }
-        return new ErrorInfo(req.getRequestURL(), errorType, detail);
+        return new ErrorInfo(req.getRequestURL(), errorType, message);
     }
 }

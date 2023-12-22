@@ -55,7 +55,7 @@ public class MealRestController extends AbstractMealController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Meal> createWithLocation(@Valid @RequestBody Meal meal, BindingResult result) {
         if (result.hasErrors()) {
-            throw new IllegalRequestDataException(ValidationUtil.getCauseString(result));
+            throw new IllegalRequestDataException(ValidationUtil.getCauseStringWithoutFormat(result));
         }
         Meal created = super.create(meal);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
